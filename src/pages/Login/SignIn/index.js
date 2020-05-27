@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Link as LinkRouter } from "react-router-dom";
+
 import {
   Avatar,
   Button,
@@ -93,7 +95,9 @@ function SignIn() {
             </Grid>
             <Grid item>
               <Link href="#" variant="body2">
-                Não tem uma conta? se cadastre!
+                <LinkRouter to="/signup">
+                  Não tem uma conta? Se cadastre!
+                </LinkRouter>
               </Link>
             </Grid>
           </Grid>
