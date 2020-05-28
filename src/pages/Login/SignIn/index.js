@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Link as LinkRouter } from "react-router-dom";
 
@@ -41,6 +41,31 @@ const useStyles = makeStyles((theme) => ({
 function SignIn() {
   const classes = useStyles();
 
+  const [account, setAccount] = useState({
+    email: "",
+    password: "",
+  });
+
+  // Função para enviar a requisão com dados do Form para fazer o login
+  async function login(e) {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:3333/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(account),
+      });
+      const responseJson = await response.json();
+
+      console.log(responseJson);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -51,7 +76,12 @@ function SignIn() {
         <Typography component="h1" variant="h5">
           Entrar
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          method="post"
+          onSubmit={login}
+        >
           <TextField
             variant="outlined"
             margin="normal"
@@ -62,6 +92,12 @@ function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={(inputValue) =>
+              setAccount({
+                ...account,
+                email: inputValue.target.value,
+              })
+            }
           />
           <TextField
             variant="outlined"
@@ -73,6 +109,12 @@ function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(inputValue) =>
+              setAccount({
+                ...account,
+                password: inputValue.target.value,
+              })
+            }
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -94,11 +136,9 @@ function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                <LinkRouter to="/signup">
-                  Não tem uma conta? Se cadastre!
-                </LinkRouter>
-              </Link>
+              <LinkRouter to="/signup">
+                Não tem uma conta? Se cadastre!
+              </LinkRouter>
             </Grid>
           </Grid>
         </form>
